@@ -1,10 +1,9 @@
 #include<stdio.h>
-#define inputMAX 3
 
 typedef enum
 {
-	BOM,
-	MAU
+	MAU,
+	BOM
 }
 CLASSIFICACAO;
 
