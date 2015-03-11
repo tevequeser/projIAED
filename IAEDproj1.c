@@ -1,29 +1,26 @@
 #include<stdio.h>
-#define inputMAX 60
+#define inputMAX 3
+
+typedef enum
+{
+	BOM,
+	MAU
+}
+CLASSIFICACAO;
+
+struct BANCO
+{
+	char[] nome;
+	CLASSIFICACAO class;
+	int referencia;
+};
+typedef struct BANCO BANCO;
+	
+//Funcao para ler input e parse it into <command> <instructions>
+ 
 
 
 int main()
 {
-	char input[inputMAX];
-	char comando;
-	int i = 0;
-	
-	scanf("%c", input);
-	
-	while(i < strlen(input))
-	{
-		while(input[i] == " " || input[i] == "\t" || input[i] == "\n")
-		{
-			i++;
-		}
-		comando = input[i];
-		
-		
-		
-		
 	
 }
-
-
-
-input = ""
