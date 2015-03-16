@@ -47,6 +47,9 @@ int * sort(int list[])
 
 void addBank(char nome[MAXnome], int class, int ref)
 {
+	/*
+	 * comando "a" (adiciona um novo banco)
+	 * */
 	int i = 0;
 	int j = 0;
 	int lenNOME = strlen(nome);
@@ -66,6 +69,9 @@ void addBank(char nome[MAXnome], int class, int ref)
 
 void downgrade(int ref)
 {
+	/*
+	 * comando "k" (classifica um banco "mau")
+	 * */
 	int i = 0;
 	while(banco[i].referencia != ref)
 	{
@@ -76,6 +82,9 @@ void downgrade(int ref)
 
 void upgrade(int ref)
 {
+	/*
+	 * comando "r"(classifica um banco "bom")
+	 * */
 	int i = 0;
 	while(banco[i].referencia != ref)
 	{
@@ -86,6 +95,9 @@ void upgrade(int ref)
 
 void addLoan(int val, int ref1, int ref2)
 {
+	/*
+	 * comando "e" (adiciona emprestimo)
+	 * */
 	int forn = 0;
 	int recb = 0;
 	while(banco[forn].referencia != ref1)
@@ -101,6 +113,9 @@ void addLoan(int val, int ref1, int ref2)
 
 void addMortgage(int val, int ref1, int ref2)
 {
+	/*
+	 * comando "p" (pagamento de emprestimos)
+	 * */
 	int forn = 0;
 	int recb = 0;
 	while(banco[forn].referencia != ref1)
@@ -116,6 +131,9 @@ void addMortgage(int val, int ref1, int ref2)
 
 void listBanks(int instr)
 {
+	/*
+	 * comando "l"
+	 * */
 	int i = 0;
 	if(instr == 0)
 	{
@@ -204,6 +222,9 @@ void listBanks(int instr)
 
 void getSize()			/*Juntar este com o K*/
 {
+	/*
+	 * comando "x" (verifica o numero total de bancos registados, numero de bancos "bons")
+	 * */
 	int i = 0;
 	int j = 0;
 	while(banco[i].isfull == 1)
@@ -253,7 +274,7 @@ int main()
 				sscanf(input, "%s %d %d %d", &command, &ref1, &ref2, &valor);
 				addMortgage(valor, ref1, ref2);
 				break;
-			case 'l':			/*falta l 2 --> its not working as it should exactly*/
+			case 'l':			/*falta l 2 --> make it print as it should*/
 				instr = -1;
 				sscanf(input, "%s %d", &command, &instr);
 				if (instr == -1)
