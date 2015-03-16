@@ -23,7 +23,7 @@ struct PAGAMENTO
 pagamento[MAXbanco][MAXbanco];
 
 int * sort(int list[])
-{
+{	
 	int i = 0;
 	int j = 0;
 	int tmp;
@@ -43,7 +43,6 @@ int * sort(int list[])
 	}
 	return(list);
 }
-
 
 void addBank(char nome[MAXnome], int class, int ref)
 {
@@ -145,16 +144,10 @@ void listBanks(int instr)
 	}
 	else if (instr == 1)
 	{ 
+		int j, inP, inV, inVM, outP, outV, outVM;
 		while(banco[i].isfull == 1)
 		{
-			int j = 0;
-			int k = 0;
-			int inP = 0;
-			int inV = 0;
-			int inVM = 0;
-			int outP = 0;
-			int outV = 0;
-			int outVM = 0;
+			j = inP = inV = inVM = outP = outV = outVM = 0;
 			
 			while(banco[j].isfull == 1)
 			{
@@ -167,20 +160,16 @@ void listBanks(int instr)
 					}
 					outP++;
 				}
-				j++;
-			}
-			while(banco[k].isfull == 1)
-			{
-				if(pagamento[k][i].emprestimo > 0)
+				if(pagamento[j][i].emprestimo > 0)
 				{
-					inV += pagamento[k][i].emprestimo;
-					if(banco[k].class == 0)
+					inV += pagamento[j][i].emprestimo;
+					if(banco[j].class == 0)
 					{
-						inVM += pagamento[k][i].emprestimo;
+						inVM += pagamento[j][i].emprestimo;
 					}
 					inP++;
 				}
-				k++;
+				j++;
 			}
 			printf("%d %s %d %d %d %d %d %d %d\n", banco[i].referencia, 
 													banco[i].nome, 
@@ -244,6 +233,14 @@ int main()
 	char input[MAXinput];
 	while(1)
 	{
+		/*
+		 * puts
+		 * puts
+		 * puts
+		 * puts
+		 * puts
+		 * 
+		*/
 		fgets(input, MAXinput, stdin);
 		switch(input[0])
 		{
