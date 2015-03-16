@@ -25,19 +25,14 @@ pagamento[MAXbanco][MAXbanco];
 int * sort(int list[])
 {	
 	int i = 0;
-	int j = 0;
 	int tmp;
 	while (i < 100)
 	{
-		while(j < 100 - i)
-		{
-			if(list[j] > list[j+1])
-			{
-				tmp = list[j+1];
-				list[j+1] = list[j];
-				list[j] = tmp;
-			}
-			j++;
+		if (list[i] > list[i+1])
+		{ tmp = list[i+1];
+		  list[i] = list[i+1];
+		  list[i] = tmp;
+		  i = 0;
 		}
 		i++;
 	}
