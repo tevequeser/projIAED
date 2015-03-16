@@ -19,3 +19,5 @@ DONE - JUST NEED TO ORGANIZE]
 - [ ] K - despromover banco com dificuldades
 
 - [ ] Make it better code cause it sucks right now.
+
+- [ ] Make better comments
