@@ -220,19 +220,11 @@ int main()
 				sscanf(input, "%s %s %d %d", &command, &nome, &class, &ref);
 				addBank(nome, class, ref);
 				break;
-			case 'k':
-				sscanf(input, "%s %d", &command, &ref);
-				classify(command, ref);
-				break;					
-			case 'r':
+			case 'k':case 'r':
 				sscanf(input, "%s %d", &command, &ref);
 				classify(command, ref);
 				break;
-			case 'e':
-				sscanf(input, "%s %d %d %d", &command, &ref1, &ref2, &valor);
-				addPagamento(command, valor, ref1, ref2);
-				break;
-			case 'p':
+			case 'e':case 'p':
 				sscanf(input, "%s %d %d %d", &command, &ref1, &ref2, &valor);
 				addPagamento(command, valor, ref1, ref2);
 				break;
