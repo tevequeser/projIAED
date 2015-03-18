@@ -22,26 +22,6 @@ struct PAGAMENTO
 }
 pagamento[MAXbanco][MAXbanco];
 
-int * sort(int list[])
-{	
-	int i = 0;
-	int tmp;
-	while (i < 100)
-	{
-		if (list[i] > list[i+1])
-		{ tmp = list[i+1];
-		  list[i+1] = list[i];
-		  list[i] = tmp;
-		  i = 0;
-		}
-		else
-		{
-		 i++;
-		}
-	}
-	return(list);
-}
-
 void addBank(char nome[MAXnome], int class, int ref)
 {
 	/*
@@ -64,36 +44,27 @@ void addBank(char nome[MAXnome], int class, int ref)
 	banco[i].isfull = 1;
 }
 
-void downgrade(int ref)
+void classify(char comm, int ref)
 {
-	/*
-	 * comando "k" (classifica um banco "mau")
+	/* comando "k" (classifica um banco "mau")
+	 * comando "r" (classifica um banco "mau")
 	 * */
 	int i = 0;
 	while(banco[i].referencia != ref)
 	{
 		i++;
 	}
-	banco[i].class = 0;
-}								/*yes these, i was talking about merging these*/
-
-void upgrade(int ref)
-{
-	/*
-	 * comando "r"(classifica um banco "bom")
-	 * */
-	int i = 0;
-	while(banco[i].referencia != ref)
-	{
-		i++;
-	}
-	banco[i].class = 1;
+	if(comm == 'k')
+		banco[i].class = 0;
+	else
+		banco[i].class = 1;
 }
 
-void addLoan(int val, int ref1, int ref2)
+void addPagamento(char comm, int val, int ref1, int ref2)
 {
 	/*
 	 * comando "e" (adiciona emprestimo)
+	 * comando "p" (amortizacao)
 	 * */
 	int forn = 0;
 	int recb = 0;
@@ -105,25 +76,10 @@ void addLoan(int val, int ref1, int ref2)
 	{
 		recb++;
 	}
-	pagamento[forn][recb].emprestimo += val;
-}
-
-void addMortgage(int val, int ref1, int ref2)
-{
-	/*
-	 * comando "p" (pagamento de emprestimos)
-	 * */
-	int forn = 0;
-	int recb = 0;
-	while(banco[forn].referencia != ref1)
-	{
-		forn++;
-	}
-	while(banco[recb].referencia != ref2)
-	{
-		recb++;
-	}
-	pagamento[forn][recb].amortizacao = val;
+	if(comm == 'e')
+		pagamento[forn][recb].emprestimo += val;
+	else
+		pagamento[forn][recb].amortizacao = val;
 }
 
 void listBanks(int instr)
@@ -185,7 +141,11 @@ void listBanks(int instr)
 	{
 		int i = 0;
 		int k;
+		int j;
+		int p = 0;
 		int total;
+		int count = 0;
+		int arr[40] = {[0 ... 39] = -1};
 		
 		while(banco[i].isfull == 1)
 		{
@@ -199,11 +159,26 @@ void listBanks(int instr)
 				}
 				k++;
 			}
+			arr[i] = total;
 			i++;
-			printf("[%d] ", total);
+		}
+		while(arr[p] != -1)
+		{
+			j = p;
+			count = 0;
+			while(arr[j] != -1)
+			{
+				if(arr[j] == arr[p])
+				{
+					count++;
+				}
+				j++;
+			 }
+			printf("%d %d\n", arr[p], count);
+			p++;
 		}
 		printf("\n");
-		
+		total = 0;
 	}
 }
 
@@ -231,14 +206,6 @@ int main()
 	char input[MAXinput];
 	while(1)
 	{
-		/*
-		 * puts
-		 * puts
-		 * puts
-		 * puts
-		 * puts
-		 * 
-		*/
 		fgets(input, MAXinput, stdin);
 		switch(input[0])
 		{
@@ -255,19 +222,19 @@ int main()
 				break;
 			case 'k':
 				sscanf(input, "%s %d", &command, &ref);
-				downgrade(ref);
-				break;					/*merge these two at the top*/
+				classify(command, ref);
+				break;					
 			case 'r':
 				sscanf(input, "%s %d", &command, &ref);
-				upgrade(ref);
+				classify(command, ref);
 				break;
 			case 'e':
 				sscanf(input, "%s %d %d %d", &command, &ref1, &ref2, &valor);
-				addLoan(valor, ref1, ref2);
+				addPagamento(command, valor, ref1, ref2);
 				break;
 			case 'p':
 				sscanf(input, "%s %d %d %d", &command, &ref1, &ref2, &valor);
-				addMortgage(valor, ref1, ref2);
+				addPagamento(command, valor, ref1, ref2);
 				break;
 			case 'l':			/*falta l 2 --> make it print as it should*/
 				instr = -1;
