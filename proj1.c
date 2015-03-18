@@ -65,9 +65,13 @@ void classify(char comm, int ref)
 	char com = comm;
 	int i = find('r', ref);
 	if(com == 'k')
+	{
 		banco[i].class = 0;
+	}
 	else if(com == 'r')
+	{
 		banco[i].class = 1;
+	}
 	else
 	{
 		printf("Invalid Instruction");
@@ -85,9 +89,13 @@ void addPagamento(char comm, int val, int ref1, int ref2)
 	int forn = find('r', ref1);
 	int recb = find('r', ref2);
 	if(comm == 'e')
+	{
 		pagamento[forn][recb].emprestimo += val;
+	}
 	else if(comm == 'p')
+	{
 		pagamento[forn][recb].amortizacao = val;
+	}
 	else
 	{
 		printf("Invalid Instruction");
@@ -184,7 +192,7 @@ void listBanks(int instr)
 	}
 }
 
-void getSize()			/*Juntar este com o K*/
+void bankNum()			/*Juntar este com o K*/
 {
 	/*
 	 * comando "x" (verifica o numero total de bancos registados, numero de bancos "bons")
@@ -228,13 +236,11 @@ int main()
 				arg = -1;
 				sscanf(input, "%s %d", &command, &arg);
 				if (arg == -1)
-				{ 
 					break;
-				}
 				listBanks(arg);
 				break;
 			case 'x':
-				getSize();
+				bankNum();
 				exit(0);
 				break;
 			default:
