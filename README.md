@@ -13,11 +13,8 @@ TODO
 
 CORE
 
-- [ ] l 2 - imprimir bancos com ligacoes entre eles. [ONGOING ALMOST 
-DONE - JUST NEED TO ORGANIZE]
+- [ ] K - despromover banco com dificuldades 
 
-- [ ] K - despromover banco com dificuldades
-
-- [ ] Make it better code cause it sucks right now.
+- [ ] Better code. [ALWAYS ONGOING]
 
 - [ ] Make better comments
