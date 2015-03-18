@@ -74,7 +74,7 @@ void classify(char comm, int ref)
 	}
 	else
 	{
-		printf("Invalid Instruction");
+		printf("Invalid Instruction\n");
 		exit(1);
 	}
 	
@@ -98,7 +98,7 @@ void addPagamento(char comm, int val, int ref1, int ref2)
 	}
 	else
 	{
-		printf("Invalid Instruction");
+		printf("Invalid Instruction\n");
 		exit(1);
 	}
 }
@@ -155,8 +155,8 @@ void listBanks(int instr)
 	else if(instr == 2)
 	{
 		int arr[50] = {[0 ... 49] = -1};
-		int i, k, j, p, total, count;
-		i = p = count = 0;
+		int c, tmp, i, k, j, p, total, count;
+		c = i = p = count = 0;
 		
 		while(banco[i].isfull == 1)
 		{
@@ -172,23 +172,34 @@ void listBanks(int instr)
 			arr[i] = total;
 			i++;
 		}
-		while(arr[p] != -1)
-		{
-			j = p;
-			count = 0;
-			while(arr[j] != -1)
+		for (p = 0; p < i; ++p)
+		{	
+			for (j = p + 1; j < i; ++j)
 			{
-				if(arr[j] == arr[p])
+				if (arr[p] > arr[j])
 				{
-					count++;
+					tmp =  arr[p];
+					arr[p] = arr[j];
+					arr[j] = tmp;
 				}
-				j++;
-			 }
-			printf("\n%d %d", arr[p], count);
-			p++;
+			}
 		}
-		printf("\n");
-		total = 0;
+		while(c < i)
+		{
+			count = 1;
+			while(arr[c] == arr[c+1])
+			{
+				count++;
+				c++;
+			}
+			printf("%d %d\n", arr[c], count);
+			c++;
+		}
+	}
+	else
+	{
+		printf("Invalid Argument\n");
+		exit(1);
 	}
 }
 
@@ -232,11 +243,8 @@ int main()
 				sscanf(input, "%s %d %d %d", &command, &arg, &arg1, &arg2);
 				addPagamento(command, arg2, arg, arg1);
 				break;
-			case 'l':			/*falta l 2 --> make it print as it should*/
-				arg = -1;
+			case 'l':
 				sscanf(input, "%s %d", &command, &arg);
-				if (arg == -1)
-					break;
 				listBanks(arg);
 				break;
 			case 'x':
