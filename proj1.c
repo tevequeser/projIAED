@@ -3,7 +3,7 @@
 #include<stdlib.h>
 
 #define MAXbanco 1000
-#define MAXnome 40
+#define MAXnome 42
 #define MAXinput 100
 
 struct BANCO
@@ -21,6 +21,19 @@ struct PAGAMENTO
 	int amortizacao;
 }
 pagamento[MAXbanco][MAXbanco];
+
+int find(char arg1, int arg2)
+{
+	int i = 0;
+	if(arg1 == 'r')
+	{
+		while(banco[i].referencia != arg2)
+		{
+			i++;
+		}
+	}
+	return i;
+}
 
 void addBank(char nome[MAXnome], int class, int ref)
 {
@@ -46,18 +59,21 @@ void addBank(char nome[MAXnome], int class, int ref)
 
 void classify(char comm, int ref)
 {
-	/* comando "k" (classifica um banco "mau")
-	 * comando "r" (classifica um banco "mau")
+	/* comando "k" (classifica um banco como "mau")
+	 * comando "r" (classifica um banco como "bom")
 	 * */
-	int i = 0;
-	while(banco[i].referencia != ref)
-	{
-		i++;
-	}
-	if(comm == 'k')
+	char com = comm;
+	int i = find('r', ref);
+	if(com == 'k')
 		banco[i].class = 0;
-	else
+	else if(com == 'r')
 		banco[i].class = 1;
+	else
+	{
+		printf("Invalid Instruction");
+		exit(1);
+	}
+	
 }
 
 void addPagamento(char comm, int val, int ref1, int ref2)
@@ -66,20 +82,17 @@ void addPagamento(char comm, int val, int ref1, int ref2)
 	 * comando "e" (adiciona emprestimo)
 	 * comando "p" (amortizacao)
 	 * */
-	int forn = 0;
-	int recb = 0;
-	while(banco[forn].referencia != ref1)
-	{
-		forn++;
-	}
-	while(banco[recb].referencia != ref2)
-	{
-		recb++;
-	}
+	int forn = find('r', ref1);
+	int recb = find('r', ref2);
 	if(comm == 'e')
 		pagamento[forn][recb].emprestimo += val;
-	else
+	else if(comm == 'p')
 		pagamento[forn][recb].amortizacao = val;
+	else
+	{
+		printf("Invalid Instruction");
+		exit(1);
+	}
 }
 
 void listBanks(int instr)
@@ -126,26 +139,16 @@ void listBanks(int instr)
 				j++;
 			}
 			printf("%d %s %d %d %d %d %d %d %d\n", banco[i].referencia, 
-													banco[i].nome, 
-													banco[i].class, 
-													inP, 
-													outP, 
-													outV, 
-													outVM, 
-													inV, 
-													inVM);
+					banco[i].nome, banco[i].class, inP, outP, outV, 
+					outVM, inV, inVM);
 			i++;
 		}
 	}
 	else if(instr == 2)
 	{
-		int i = 0;
-		int k;
-		int j;
-		int p = 0;
-		int total;
-		int count = 0;
 		int arr[40] = {[0 ... 39] = -1};
+		int i, k, j, p, total, count;
+		i = p = count = 0;
 		
 		while(banco[i].isfull == 1)
 		{
@@ -210,36 +213,31 @@ int main()
 		switch(input[0])
 		{
 			char nome[MAXnome];
-			int class;
-			int ref;
-			int ref1;
-			int ref2;
-			int valor;
-			int instr;
+			int arg, arg1, arg2;
 			case 'a':
-				sscanf(input, "%s %s %d %d", &command, &nome, &class, &ref);
-				addBank(nome, class, ref);
+				sscanf(input, "%s %s %d %d", &command, &nome, &arg, &arg1);
+				addBank(nome, arg, arg1);
 				break;
 			case 'k':case 'r':
-				sscanf(input, "%s %d", &command, &ref);
-				classify(command, ref);
+				sscanf(input, "%s %d", &command, &arg);
+				classify(command, arg);
 				break;
 			case 'e':case 'p':
-				sscanf(input, "%s %d %d %d", &command, &ref1, &ref2, &valor);
-				addPagamento(command, valor, ref1, ref2);
+				sscanf(input, "%s %d %d %d", &command, &arg, &arg1, &arg2);
+				addPagamento(command, arg2, arg, arg1);
 				break;
 			case 'l':			/*falta l 2 --> make it print as it should*/
-				instr = -1;
-				sscanf(input, "%s %d", &command, &instr);
-				if (instr == -1)
+				arg = -1;
+				sscanf(input, "%s %d", &command, &arg);
+				if (arg == -1)
 				{ 
 					break;
 				}
-				listBanks(instr);
+				listBanks(arg);
 				break;
 			case 'x':
 				getSize();
-				exit(EXIT_SUCCESS);
+				exit(0);
 				break;
 			default:
 				break;
