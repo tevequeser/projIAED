@@ -146,14 +146,13 @@ void listBanks(int instr)
 	}
 	else if(instr == 2)
 	{
-		int arr[40] = {[0 ... 39] = -1};
+		int arr[50] = {[0 ... 49] = -1};
 		int i, k, j, p, total, count;
 		i = p = count = 0;
 		
 		while(banco[i].isfull == 1)
 		{
-			k = 0;
-			total = 0;
+			k = total = 0;
 			while(banco[k].isfull == 1)
 			{
 				if(pagamento[i][k].emprestimo > 0 || pagamento[k][i].emprestimo > 0)
@@ -205,8 +204,7 @@ void getSize()			/*Juntar este com o K*/
 
 int main()
 {
-	char command;
-	char input[MAXinput];
+	char command, input[MAXinput];
 	while(1)
 	{
 		fgets(input, MAXinput, stdin);
@@ -215,7 +213,7 @@ int main()
 			char nome[MAXnome];
 			int arg, arg1, arg2;
 			case 'a':
-				sscanf(input, "%s %s %d %d", &command, &nome, &arg, &arg1);
+				sscanf(input, "%s %s %d %d", &command, nome, &arg, &arg1);
 				addBank(nome, arg, arg1);
 				break;
 			case 'k':case 'r':
