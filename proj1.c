@@ -11,7 +11,6 @@ struct BANCO
 	char nome[MAXnome];
 	int class;
 	int referencia;
-	int outVM;
 	int isfull;
 }
 banco[MAXbanco];
@@ -102,7 +101,7 @@ void listBanks(int instr)
 		int j, inP, inV, inVM, outP, outV, outVM;
 		while(banco[i].isfull == 1)
 		{
-			j = inP = inV = inVM = outP = outV = 0;
+			j = inP = inV = inVM = outP = outV = outVM = 0;
 			
 			while(banco[j].isfull == 1)
 			{
@@ -111,7 +110,7 @@ void listBanks(int instr)
 					outV += pagamento[i][j].emprestimo;
 					if(banco[j].class == 0)
 					{
-						banco[i].outVM += pagamento[i][j].emprestimo;
+						outVM += pagamento[i][j].emprestimo;
 					}
 					outP++;
 				}
@@ -132,7 +131,7 @@ void listBanks(int instr)
 													inP, 
 													outP, 
 													outV, 
-													banco[i].outVM, 
+													outVM, 
 													inV, 
 													inVM);
 			i++;
