@@ -39,7 +39,10 @@ void addBank(char nome[MAXnome], int class, int ref)
 {
 	/*
 	 * comando "a" (adiciona um novo banco)
-	 * */
+	 * recebe: dois inteiros (class [0, 1] e a referencia) e o nome
+	 * do banco (tamanho maximo de 41 (42 reservado para o \0))
+	 * 
+	 */
 	int i = 0;
 	int j = 0;
 	int lenNOME = strlen(nome);
@@ -62,19 +65,18 @@ void classify(char comm, int ref)
 	/* comando "k" (classifica um banco como "mau")
 	 * comando "r" (classifica um banco como "bom")
 	 * */
-	char com = comm;
 	int i = find('r', ref);
-	if(com == 'k')
+	if(comm == 'k')
 	{
 		banco[i].class = 0;
 	}
-	else if(com == 'r')
+	else if(comm == 'r')
 	{
 		banco[i].class = 1;
 	}
 	else
 	{
-		printf("Invalid Instruction\n");
+		printf("Invalid Argument\n");
 		exit(1);
 	}
 	
@@ -98,7 +100,7 @@ void addPagamento(char comm, int val, int ref1, int ref2)
 	}
 	else
 	{
-		printf("Invalid Instruction\n");
+		printf("Invalid Argument\n");
 		exit(1);
 	}
 }
@@ -106,7 +108,7 @@ void addPagamento(char comm, int val, int ref1, int ref2)
 void listBanks(int instr)
 {
 	/*
-	 * comando "l"
+	 * comando "l" (lista os bancos de acordo com a instrucao dada)
 	 * */
 	int i = 0;
 	if(instr == 0)
@@ -154,11 +156,11 @@ void listBanks(int instr)
 	}
 	else if(instr == 2)
 	{
-		int arr[50] = {[0 ... 49] = -1};
+		int arr[MAXbanco] = {[0 ... MAXbanco-1] = -1};
 		int c, tmp, i, k, j, p, total, count;
 		c = i = p = count = 0;
 		
-		while(banco[i].isfull == 1)
+		while(banco[i].isfull == 1) 	/*Contar ligacoes e por na lista*/
 		{
 			k = total = 0;
 			while(banco[k].isfull == 1)
@@ -172,7 +174,7 @@ void listBanks(int instr)
 			arr[i] = total;
 			i++;
 		}
-		for (p = 0; p < i; ++p)
+		for (p = 0; p < i; ++p)			/*Sort da lista - Bubble Sort*/
 		{	
 			for (j = p + 1; j < i; ++j)
 			{
@@ -231,23 +233,23 @@ int main()
 		{
 			char nome[MAXnome];
 			int arg, arg1, arg2;
-			case 'a':
+			case 'a':				/*adicionar banco*/
 				sscanf(input, "%s %s %d %d", &command, nome, &arg, &arg1);
 				addBank(nome, arg, arg1);
 				break;
-			case 'k':case 'r':
+			case 'k':case 'r':		/*upgrade/downgrade banco*/
 				sscanf(input, "%s %d", &command, &arg);
 				classify(command, arg);
 				break;
-			case 'e':case 'p':
+			case 'e':case 'p':		/*adicionar emprestimo/amortizacao*/
 				sscanf(input, "%s %d %d %d", &command, &arg, &arg1, &arg2);
 				addPagamento(command, arg2, arg, arg1);
 				break;
-			case 'l':
+			case 'l':				/*listar os bancos*/
 				sscanf(input, "%s %d", &command, &arg);
 				listBanks(arg);
 				break;
-			case 'x':
+			case 'x':				/*exit do programa (voluntario)*/
 				bankNum();
 				exit(0);
 				break;
@@ -257,3 +259,18 @@ int main()
 	}	
 	return(0);
 }
+
+/* Usamos sscanf em vez de scanf ou de fcanf + stdin porque nao queremos
+ * que leia o mesmo output de linhas diferentes no caso de haver algum
+ * erro de input.
+ * 
+ * Decidimos usar um Bubble sort nosso em vez do qsort() do stdlib.h
+ * com o objectivo de reduzir o maximo possivel a utilizacao de libs 
+ * e de usar o maximo possivel o nosso codigo. Portanto, embora tenhamos
+ * usado o exit(), decidimos usar como argumentos o 0 e o 1 em vez do
+ * EXIT_SUCCESS e do EXIT_FAILURE.
+ * 
+ * Como se pode ver, usamos o estilo de Allman (ou BSD) porque qualquer 
+ * outro estilo e objectivamente inferior.
+ */
+
