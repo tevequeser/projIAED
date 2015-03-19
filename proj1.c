@@ -12,15 +12,13 @@ struct BANCO
 	int class;
 	int referencia;
 	int isfull;
-}
-banco[MAXbanco];
+} banco[MAXbanco];
 
 struct PAGAMENTO
 {
 	int emprestimo;
 	int amortizacao;
-}
-pagamento[MAXbanco][MAXbanco];
+} pagamento[MAXbanco][MAXbanco];
 
 int find(char arg1, int arg2)
 {
@@ -62,8 +60,9 @@ void addBank(char nome[MAXnome], int class, int ref)
 
 void classify(char comm, int ref)
 {
-	/* comando "k" (classifica um banco como "mau")
-	 * comando "r" (classifica um banco como "bom")
+	/*
+	 * comando "k" (despromove para um banco "mau")
+	 * comando "r" (promove para um banco "bom")
 	 * */
 	int i = find('r', ref);
 	if(comm == 'k')
@@ -77,7 +76,7 @@ void classify(char comm, int ref)
 	else
 	{
 		printf("Invalid Argument\n");
-		exit(1);
+		exit(1);	/* EXIT_FAILURE */
 	}
 	
 }
@@ -101,7 +100,7 @@ void addPagamento(char comm, int val, int ref1, int ref2)
 	else
 	{
 		printf("Invalid Argument\n");
-		exit(1);
+		exit(1);	/* EXIT_FAILURE */
 	}
 }
 
@@ -156,52 +155,34 @@ void listBanks(int instr)
 	}
 	else if(instr == 2)
 	{
-		int arr[MAXbanco] = {[0 ... MAXbanco-1] = -1};
-		int c, tmp, i, k, j, p, total, count;
-		c = i = p = count = 0;
+		int i = 0 , k, parceiros = 0;
+		int arr[MAXbanco-1] = {0};
 		
-		while(banco[i].isfull == 1) 	/*Contar ligacoes e por na lista*/
+		while(banco[i].isfull == 1) 	
 		{
-			k = total = 0;
+			k = 0;
 			while(banco[k].isfull == 1)
 			{
 				if(pagamento[i][k].emprestimo > 0 || pagamento[k][i].emprestimo > 0)
 				{
-					total++;
+					parceiros++;
 				}
 				k++;
 			}
-			arr[i] = total;
+			arr[parceiros]++;
+			parceiros = 0;
 			i++;
 		}
-		for (p = 0; p < i; ++p)			/*Sort da lista - Bubble Sort*/
+		for (i = 0; i < MAXbanco -1; i++)	
 		{	
-			for (j = p + 1; j < i; ++j)
-			{
-				if (arr[p] > arr[j])
-				{
-					tmp =  arr[p];
-					arr[p] = arr[j];
-					arr[j] = tmp;
-				}
-			}
-		}
-		while(c < i)
-		{
-			count = 1;
-			while(arr[c] == arr[c+1])
-			{
-				count++;
-				c++;
-			}
-			printf("%d %d\n", arr[c], count);
-			c++;
+			if (arr[i] > 0)
+				printf("%d %d\n", i, arr[i]);
 		}
 	}
 	else
 	{
 		printf("Invalid Argument\n");
-		exit(1);
+		exit(1);	/* EXIT_FAILURE */
 	}
 }
 
@@ -251,7 +232,7 @@ int main()
 				break;
 			case 'x':				/*exit do programa (voluntario)*/
 				bankNum();
-				exit(0);
+				exit(0);	/* EXIT_SUCCESS */
 				break;
 			default:
 				break;
@@ -273,4 +254,3 @@ int main()
  * Como se pode ver, usamos o estilo de Allman (ou BSD) porque qualquer 
  * outro estilo e objectivamente inferior.
  */
-
