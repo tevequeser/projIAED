@@ -69,7 +69,6 @@ void classify(char comm, int ref)
 	}
 	else
 	{
-		printf("Invalid Argument\n");
 		exit(1);	/* EXIT_FAILURE */
 	}
 	
@@ -96,7 +95,6 @@ void addPagamento(char comm, int val, int ref1, int ref2, int pagamento[MAXbanco
 	}
 	else
 	{
-		printf("Invalid Argument\n");
 		exit(1);	/* EXIT_FAILURE */
 	}
 }
@@ -180,8 +178,7 @@ void listBanks(int instr, int pagamento[MAXbanco][MAXbanco])
 	}
 	else
 	{
-		printf("Invalid Argument\n");
-		exit(1);		/* EXIT_FAILURE */
+		exit(1);	/* EXIT_FAILURE */
 	}
 }
 
