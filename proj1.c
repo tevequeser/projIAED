@@ -89,7 +89,10 @@ void addPagamento(char comm, int val, int ref1, int ref2, int pagamento[MAXbanco
 	}
 	else if(comm == 'p')
 	{
-		pagamento[forn][recb] -= val;
+		if(val <= pagamento[forn][recb])
+		{
+			pagamento[forn][recb] -= val;
+		}
 	}
 	else
 	{
@@ -187,17 +190,16 @@ void bankNum()			/*Juntar este com o K*/
 	/*
 	 * comando "x" (verifica o numero total de bancos registados, numero de bancos "bons")
 	 * */
-	int i = 0;
-	int j = 0;
-	while(banco[i].isfull == 1)
+	int Ntotal = 0, Nbons = 0;
+	while(banco[Ntotal].isfull == 1)
 	{
-		if(banco[i].class == 1)
+		if(banco[Ntotal].class == 1)
 		{
-			j++;
+			Nbons++;
 		}
-		i++;
+		Ntotal++;
 	}
-	printf("%d %d\n", i, j);
+	printf("%d %d\n", Ntotal, Nbons);
 }
 
 int main()
@@ -237,11 +239,3 @@ int main()
 	}	
 	return(0);
 }
-
-/* Usamos sscanf em vez de scanf ou de fcanf + stdin porque nao queremos
- * que leia o mesmo output de linhas diferentes no caso de haver algum
- * erro de input.
- * 
- * Como se pode ver, usamos o estilo de Allman (ou BSD) porque qualquer 
- * outro estilo e objectivamente inferior.
- */
