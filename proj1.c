@@ -14,12 +14,6 @@ struct BANCO
 	int isfull;
 } banco[MAXbanco];
 
-struct PAGAMENTO
-{
-	int emprestimo;
-	int amortizacao;
-} pagamento[MAXbanco][MAXbanco];
-
 int find(char arg1, int arg2)
 {
 	int i = 0;
@@ -81,7 +75,7 @@ void classify(char comm, int ref)
 	
 }
 
-void addPagamento(char comm, int val, int ref1, int ref2)
+void addPagamento(char comm, int val, int ref1, int ref2, int pagamento[MAXbanco][MAXbanco])
 {
 	/*
 	 * comando "e" (adiciona emprestimo)
@@ -91,11 +85,11 @@ void addPagamento(char comm, int val, int ref1, int ref2)
 	int recb = find('r', ref2);
 	if(comm == 'e')
 	{
-		pagamento[forn][recb].emprestimo += val;
+		pagamento[forn][recb] += val;
 	}
 	else if(comm == 'p')
 	{
-		pagamento[forn][recb].amortizacao = val;
+		pagamento[forn][recb] -= val;
 	}
 	else
 	{
@@ -104,7 +98,7 @@ void addPagamento(char comm, int val, int ref1, int ref2)
 	}
 }
 
-void listBanks(int instr)
+void listBanks(int instr, int pagamento[MAXbanco][MAXbanco])
 {
 	/*
 	 * comando "l" (lista os bancos de acordo com a instrucao dada)
@@ -127,21 +121,21 @@ void listBanks(int instr)
 			
 			while(banco[j].isfull == 1)
 			{
-				if(pagamento[i][j].emprestimo > 0)
+				if(pagamento[i][j] > 0)
 				{
-					outV += pagamento[i][j].emprestimo;
+					outV += pagamento[i][j];
 					if(banco[j].class == 0)
 					{
-						outVM += pagamento[i][j].emprestimo;
+						outVM += pagamento[i][j];
 					}
 					outP++;
 				}
-				if(pagamento[j][i].emprestimo > 0)
+				if(pagamento[j][i] > 0)
 				{
-					inV += pagamento[j][i].emprestimo;
+					inV += pagamento[j][i];
 					if(banco[j].class == 0)
 					{
-						inVM += pagamento[j][i].emprestimo;
+						inVM += pagamento[j][i];
 					}
 					inP++;
 				}
@@ -163,7 +157,7 @@ void listBanks(int instr)
 			k = 0;
 			while(banco[k].isfull == 1)
 			{
-				if(pagamento[i][k].emprestimo > 0 || pagamento[k][i].emprestimo > 0)
+				if(pagamento[i][k] > 0 || pagamento[k][i] > 0)
 				{
 					parceiros++;
 				}
@@ -176,13 +170,15 @@ void listBanks(int instr)
 		for (i = 0; i < MAXbanco -1; i++)	
 		{	
 			if (arr[i] > 0)
+			{
 				printf("%d %d\n", i, arr[i]);
+			}
 		}
 	}
 	else
 	{
 		printf("Invalid Argument\n");
-		exit(1);	/* EXIT_FAILURE */
+		exit(1);		/* EXIT_FAILURE */
 	}
 }
 
@@ -207,6 +203,7 @@ void bankNum()			/*Juntar este com o K*/
 int main()
 {
 	char command, input[MAXinput];
+	static int pagamento[MAXbanco][MAXbanco];
 	while(1)
 	{
 		fgets(input, MAXinput, stdin);
@@ -224,15 +221,15 @@ int main()
 				break;
 			case 'e':case 'p':		/*adicionar emprestimo/amortizacao*/
 				sscanf(input, "%s %d %d %d", &command, &arg, &arg1, &arg2);
-				addPagamento(command, arg2, arg, arg1);
+				addPagamento(command, arg2, arg, arg1, pagamento);
 				break;
 			case 'l':				/*listar os bancos*/
 				sscanf(input, "%s %d", &command, &arg);
-				listBanks(arg);
+				listBanks(arg, pagamento);
 				break;
 			case 'x':				/*exit do programa (voluntario)*/
 				bankNum();
-				exit(0);	/* EXIT_SUCCESS */
+				exit(0);			/* EXIT_SUCCESS */
 				break;
 			default:
 				break;
@@ -244,12 +241,6 @@ int main()
 /* Usamos sscanf em vez de scanf ou de fcanf + stdin porque nao queremos
  * que leia o mesmo output de linhas diferentes no caso de haver algum
  * erro de input.
- * 
- * Decidimos usar um Bubble sort nosso em vez do qsort() do stdlib.h
- * com o objectivo de reduzir o maximo possivel a utilizacao de libs 
- * e de usar o maximo possivel o nosso codigo. Portanto, embora tenhamos
- * usado o exit(), decidimos usar como argumentos o 0 e o 1 em vez do
- * EXIT_SUCCESS e do EXIT_FAILURE.
  * 
  * Como se pode ver, usamos o estilo de Allman (ou BSD) porque qualquer 
  * outro estilo e objectivamente inferior.
