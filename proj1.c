@@ -99,6 +99,59 @@ void addPagamento(char comm, int val, int ref1, int ref2, int pagamento[MAXbanco
 	}
 }
 
+void killBom(int pagamento[MAXbanco][MAXbanco])
+{
+	int i = 0;
+	int emp = 0;
+	int x = 0;
+	int check = 0;
+	int j, inP, inV, inVM, outP, outV, outVM;
+	while(banco[i].isfull == 1)
+	{
+		j = outVM = 0;
+		while(banco[j].isfull == 1)
+		{
+			if(pagamento[i][j] > 0)
+			{
+				outV += pagamento[i][j];
+				if(banco[j].class == 0 && banco[i].class == 1)
+				{
+					outVM += pagamento[i][j];
+				}
+				outP++;
+			}
+			if(pagamento[j][i] > 0)
+			{
+				inV += pagamento[j][i];
+				if(banco[j].class == 0)
+				{
+					inVM += pagamento[j][i];
+				}
+				inP++;
+			}
+			j++;
+		}
+		if(banco[i].class == 1 && outVM > emp)
+		{
+			emp = outVM;
+			x = i;
+			check = 1;
+		}
+		i++;
+	}
+	if(check == 1)
+	{
+		banco[x].class = 0;
+	}
+	else
+	{
+		return;
+	}
+	printf("*%d %s %d %d %d %d %d %d %d\n", banco[x].referencia, 
+					banco[x].nome, banco[x].class, inP, outP, outV, 
+					outVM, inV, inVM);
+}
+	
 void listBanks(int instr, int pagamento[MAXbanco][MAXbanco])
 {
 	/*
@@ -225,6 +278,10 @@ int main()
 			case 'l':				/*listar os bancos*/
 				sscanf(input, "%s %d", &command, &arg);
 				listBanks(arg, pagamento);
+				break;
+			case 'K':
+				killBom(pagamento);
+				bankNum();
 				break;
 			case 'x':				/*exit do programa (voluntario)*/
 				bankNum();

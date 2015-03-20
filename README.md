@@ -13,8 +13,6 @@ TODO
 
 CORE
 
-- [ ] K - despromover banco com dificuldades 
-
 - [ ] Better code. [ALWAYS ONGOING]
 
 - [ ] Make better comments
