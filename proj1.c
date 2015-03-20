@@ -108,7 +108,7 @@ void killBom(int pagamento[MAXbanco][MAXbanco])
 	int j, inP, inV, inVM, outP, outV, outVM;
 	while(banco[i].isfull == 1)
 	{
-		j = outVM = 0;
+		j = outVM = inP = inV = inVM = outP = outV = outVM = 0;
 		while(banco[j].isfull == 1)
 		{
 			if(pagamento[i][j] > 0)
