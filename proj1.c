@@ -29,8 +29,7 @@ void addBank(char nome[MAXnome], int class, int ref)
 	 * comando "a" (adiciona um novo banco)
 	 * recebe: dois inteiros (class [0, 1] e a referencia) e o nome
 	 * do banco (tamanho maximo de 41 (42 reservado para o \0))
-	 * 
-	 */
+	 * */
 	int i = 0;
 	int j = 0;
 	int lenNOME = strlen(nome);
