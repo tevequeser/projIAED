@@ -132,7 +132,7 @@ void killBom(int pagamento[MAXbanco][MAXbanco])
 			}
 			j++;
 		}
-		if(banco[i].class == 1 && outVMt >= outVM)
+		if(banco[i].class == 1 && outVMt >= outVM && outVMt > 0)
 		{
 			inP = inPt;
 			inV = inVt;
