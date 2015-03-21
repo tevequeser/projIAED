@@ -102,38 +102,44 @@ void addPagamento(char comm, int val, int ref1, int ref2, int pagamento[MAXbanco
 void killBom(int pagamento[MAXbanco][MAXbanco])
 {
 	int i = 0;
-	int emp = 0;
 	int x = 0;
 	int check = 0;
 	int j, inP, inV, inVM, outP, outV, outVM;
+	int inPt, inVt, inVMt, outPt, outVt, outVMt;
+	outVM = 0;
 	while(banco[i].isfull == 1)
 	{
-		j = inP = inV = inVM = outP = outV = outVM = 0;
+		j = inPt = inVt = inVMt = outPt = outVt = outVMt = 0;
 		while(banco[j].isfull == 1)
 		{
 			if(pagamento[i][j] > 0)
 			{
-				outV += pagamento[i][j];
-				if(banco[j].class == 0 && banco[i].class == 1)
+				outVt += pagamento[i][j];
+				if(banco[j].class == 0)
 				{
-					outVM += pagamento[i][j];
+					outVMt += pagamento[i][j];
 				}
-				outP++;
+				outPt++;
 			}
 			if(pagamento[j][i] > 0)
 			{
-				inV += pagamento[j][i];
+				inVt += pagamento[j][i];
 				if(banco[j].class == 0)
 				{
-					inVM += pagamento[j][i];
+					inVMt += pagamento[j][i];
 				}
-				inP++;
+				inPt++;
 			}
 			j++;
 		}
-		if(banco[i].class == 1 && outVM > emp)
+		if(banco[i].class == 1 && outVMt > outVM)
 		{
-			emp = outVM;
+			inP = inPt;
+			inV = inVt;
+			inVM = inVMt;
+			outP = outPt;
+			outV = outVt;
+			outVM = outVMt;
 			x = i;
 			check = 1;
 		}
