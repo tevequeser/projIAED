@@ -88,9 +88,9 @@ void addPagamento(char comm, int val, int ref1, int ref2, int pagamento[MAXbanco
 	}
 	else if(comm == 'p')
 	{
-		if(val <= pagamento[forn][recb])
+		if(pagamento[recb][forn] >= val)
 		{
-			pagamento[forn][recb] -= val;
+			pagamento[recb][forn] -= val;
 		}
 	}
 	else
