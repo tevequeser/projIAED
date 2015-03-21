@@ -93,6 +93,9 @@ void addPagamento(char comm, int val, int ref1, int ref2, int pagamento[MAXbanco
 
 void killBom(int pagamento[MAXbanco][MAXbanco])
 {
+	/*
+	 * comando 'K' (mostra os dados de um banco 'bom' com maior divida)
+	 * */
 	int i, x, j, check, inP, inV, inVM, outP, outV, outVM, 
 	inPt, inVt, inVMt, outPt, outVt, outVMt;
 	outVM = i = x = check = 0;
