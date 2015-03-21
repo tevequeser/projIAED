@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include<string.h>
-#include<stdlib.h>
 
 #define MAXbanco 1000
 #define MAXnome 42
@@ -14,15 +13,12 @@ struct BANCO
 	int isfull;
 } banco[MAXbanco];
 
-int find(char arg1, int arg2)
+int find(int arg1)
 {
 	int i = 0;
-	if(arg1 == 'r')
+	while(banco[i].referencia != arg1)
 	{
-		while(banco[i].referencia != arg2)
-		{
-			i++;
-		}
+		i++;
 	}
 	return i;
 }
@@ -58,20 +54,17 @@ void classify(char comm, int ref)
 	 * comando "k" (despromove para um banco "mau")
 	 * comando "r" (promove para um banco "bom")
 	 * */
-	int i = find('r', ref);
-	if(comm == 'k')
+	int i = find(ref);
+	switch(comm)
 	{
-		banco[i].class = 0;
+		case 'k':
+			banco[i].class = 0;
+			break;
+		case 'r':
+			banco[i].class = 1;
+		default:
+			break;
 	}
-	else if(comm == 'r')
-	{
-		banco[i].class = 1;
-	}
-	else
-	{
-		exit(1);	/* EXIT_FAILURE */
-	}
-	
 }
 
 void addPagamento(char comm, int val, int ref1, int ref2, int pagamento[MAXbanco][MAXbanco])
@@ -80,33 +73,29 @@ void addPagamento(char comm, int val, int ref1, int ref2, int pagamento[MAXbanco
 	 * comando "e" (adiciona emprestimo)
 	 * comando "p" (amortizacao)
 	 * */
-	int forn = find('r', ref1);
-	int recb = find('r', ref2);
-	if(comm == 'e')
+	int forn = find(ref1);
+	int recb = find(ref2);
+	switch(comm)
 	{
-		pagamento[forn][recb] += val;
-	}
-	else if(comm == 'p')
-	{
-		if(pagamento[recb][forn] >= val)
-		{
-			pagamento[recb][forn] -= val;
-		}
-	}
-	else
-	{
-		exit(1);	/* EXIT_FAILURE */
+		case 'e':
+			pagamento[forn][recb] += val;
+			break;
+		case 'p':
+			if(pagamento[recb][forn] >= val)
+			{
+				pagamento[recb][forn] -= val;
+			}
+			break;
+		default:
+			break;
 	}
 }
 
 void killBom(int pagamento[MAXbanco][MAXbanco])
 {
-	int i = 0;
-	int x = 0;
-	int check = 0;
-	int j, inP, inV, inVM, outP, outV, outVM;
-	int inPt, inVt, inVMt, outPt, outVt, outVMt;
-	outVM = 0;
+	int i, x, j, check, inP, inV, inVM, outP, outV, outVM, 
+	inPt, inVt, inVMt, outPt, outVt, outVMt;
+	outVM = i = x = check = 0;
 	while(banco[i].isfull == 1)
 	{
 		j = inPt = inVt = inVMt = outPt = outVt = outVMt = 0;
@@ -163,88 +152,85 @@ void listBanks(int instr, int pagamento[MAXbanco][MAXbanco])
 	/*
 	 * comando "l" (lista os bancos de acordo com a instrucao dada)
 	 * */
-	int i = 0;
-	if(instr == 0)
+	int i, j, inP, inV, inVM, outP, outV, outVM;
+	int k, parceiros = i = 0;
+	int arr[MAXbanco-1] = {0};
+	switch(instr)
 	{
-		while(banco[i].isfull == 1)
-		{
-			printf("%d %s %d\n", banco[i].referencia, banco[i].nome, banco[i].class);
-			i++;
-		}
-	}
-	else if (instr == 1)
-	{ 
-		int j, inP, inV, inVM, outP, outV, outVM;
-		while(banco[i].isfull == 1)
-		{
-			j = inP = inV = inVM = outP = outV = outVM = 0;
-			
-			while(banco[j].isfull == 1)
+		case 0:
+			while(banco[i].isfull == 1)
 			{
-				if(pagamento[i][j] > 0)
+				printf("%d %s %d\n", banco[i].referencia, banco[i].nome, banco[i].class);
+				i++;
+			}
+			break;
+		case 1:
+			while(banco[i].isfull == 1)
+			{
+				j = inP = inV = inVM = outP = outV = outVM = 0;
+				
+				while(banco[j].isfull == 1)
 				{
-					outV += pagamento[i][j];
-					if(banco[j].class == 0)
+					if(pagamento[i][j] > 0)
 					{
-						outVM += pagamento[i][j];
+						outV += pagamento[i][j];
+						if(banco[j].class == 0)
+						{
+							outVM += pagamento[i][j];
+						}
+						outP++;
 					}
-					outP++;
-				}
-				if(pagamento[j][i] > 0)
-				{
-					inV += pagamento[j][i];
-					if(banco[j].class == 0)
+					if(pagamento[j][i] > 0)
 					{
-						inVM += pagamento[j][i];
+						inV += pagamento[j][i];
+						if(banco[j].class == 0)
+						{
+							inVM += pagamento[j][i];
+						}
+						inP++;
 					}
-					inP++;
+					j++;
 				}
-				j++;
+				printf("%d %s %d %d %d %d %d %d %d\n", banco[i].referencia, 
+						banco[i].nome, banco[i].class, inP, outP, outV, 
+						outVM, inV, inVM);
+				i++;
 			}
-			printf("%d %s %d %d %d %d %d %d %d\n", banco[i].referencia, 
-					banco[i].nome, banco[i].class, inP, outP, outV, 
-					outVM, inV, inVM);
-			i++;
-		}
-	}
-	else if(instr == 2)
-	{
-		int i = 0 , k, parceiros = 0;
-		int arr[MAXbanco-1] = {0};
-		
-		while(banco[i].isfull == 1) 	
-		{
-			k = 0;
-			while(banco[k].isfull == 1)
+			break;
+		case 2:
+			while(banco[i].isfull == 1) 	
 			{
-				if(pagamento[i][k] > 0 || pagamento[k][i] > 0)
+				k = 0;
+				while(banco[k].isfull == 1)
 				{
-					parceiros++;
+					if(pagamento[i][k] > 0 || pagamento[k][i] > 0)
+					{
+						parceiros++;
+					}
+					k++;
 				}
-				k++;
+				arr[parceiros]++;
+				parceiros = 0;
+				i++;
 			}
-			arr[parceiros]++;
-			parceiros = 0;
-			i++;
-		}
-		for (i = 0; i < MAXbanco -1; i++)	
-		{	
-			if (arr[i] > 0)
-			{
-				printf("%d %d\n", i, arr[i]);
+			for (i = 0; i < MAXbanco -1; i++)	
+			{	
+				if (arr[i] > 0)
+				{
+					printf("%d %d\n", i, arr[i]);
+				}
 			}
-		}
-	}
-	else
-	{
-		exit(1);	/* EXIT_FAILURE */
+			break;
+		default:
+			break;
 	}
 }
 
-void bankNum()			/*Juntar este com o K*/
+void bankNum()
 {
 	/*
-	 * comando "x" (verifica o numero total de bancos registados, numero de bancos "bons")
+	 * comando "x" (verifica o numero total de bancos registados,
+	 * numero de bancos "bons")
 	 * */
 	int Ntotal = 0, Nbons = 0;
 	while(banco[Ntotal].isfull == 1)
@@ -291,7 +277,7 @@ int main()
 				break;
 			case 'x':				/*exit do programa (voluntario)*/
 				bankNum();
-				exit(0);			/* EXIT_SUCCESS */
+				return(0);
 				break;
 			default:
 				break;
